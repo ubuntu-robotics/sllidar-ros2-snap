@@ -40,7 +40,7 @@ parts:
         craftctl default
 
         version="$(grep -oP '(?<=<version>).*?(?=</version>)' $CRAFT_PART_SRC_WORK/package.xml)"
-        snapcraftctl set-version "$version"
+        craftctl set version="$version"
 
   # copy local scripts to the snap usr/bin
   local-files:
