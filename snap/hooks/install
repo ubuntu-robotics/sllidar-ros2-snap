@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+snapctl set model!  # unset
+snapctl set baudrate!  # unset
