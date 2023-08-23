@@ -34,7 +34,7 @@ if [ -n "${BAUDRATE}" ]; then
   fi
 fi
 
-if ! $($SNAP/usr/bin/are_params_set.sh); then
+if ! $($SNAP/usr/bin/is_model_set.sh); then
   READY=false
 fi
 
