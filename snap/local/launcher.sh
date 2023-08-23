@@ -1,6 +1,4 @@
-#!/usr/bin/bash
-
-set -e
+#!/usr/bin/bash -e
 
 MODEL="$(snapctl get model)"
 BAUDRATE="$(snapctl get baudrate)"
