@@ -1,0 +1,56 @@
+#!/bin/sh -e
+
+MODEL="$(snapctl get model)"
+BAUDRATE="$(snapctl get baudrate)"
+
+READY=true
+
+if [ -n "${MODEL}" ]; then
+  # Check that model is a valid value
+  case "${MODEL}" in
+    "a1") ;;
+    "a2m12") ;;
+    "a2m7") ;;
+    "a2m8") ;;
+    "a3") ;;
+    "s1") ;;
+    "s1_tcp") ;;
+    "s2") ;;
+    "s2e") ;;
+    "s3") ;;
+    "t1") ;;
+    *)
+      >&2 echo "'$MODEL' is not a supported value for model."
+      return 1
+      ;;
+  esac
+fi
+
+if [ -n "${BAUDRATE}" ]; then
+  # Check that baudrate is a valid value
+  if ! expr "${BAUDRATE}" : '^[0-9]\+$' > /dev/null; then
+    echo "'${BAUDRATE}' is not a valid baudrate value" >&2
+    return 1
+  fi
+fi
+
+if ! $($SNAP/usr/bin/is_model_set.sh); then
+  READY=false
+fi
+
+if ! $($SNAP/usr/bin/are_interfaces_plugged.sh); then
+  READY=false
+fi
+
+if [ "${READY}" = true ]; then
+  # We started originally with disabled service, make sure it is enabled
+  # since we are sure params are set and interfaces are connected
+  if snapctl services ${SNAP_NAME}.${SNAP_NAME} | grep -q inactive; then
+    snapctl start --enable ${SNAP_NAME}.${SNAP_NAME} 2>&1 || true
+    exit 0
+  fi
+
+  # Service was already enabled, just restart it to make sure the new
+  # config values are picked up
+  snapctl restart ${SNAP_NAME}.${SNAP_NAME} 2>&1 || true
+fi

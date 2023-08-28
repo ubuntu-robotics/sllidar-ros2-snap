@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+# unset
+snapctl set model!  # This is the only mandatory parameter
+
+OPTIONS="baudrate channel-type serial-port serial-baudrate frame-id inverted \
+angle-compensate scan-mode udp-ip udp-port scan-frequency"
+
+for OPTION in ${OPTIONS}; do
+  snapctl set ${OPTION}!
+done
