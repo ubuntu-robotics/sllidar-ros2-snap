@@ -1,0 +1,41 @@
+#!/bin/sh -e
+
+VENDOR_ID="10c4"
+
+get_path() {
+    # List all serial device and resolve the symlinks to absolute paths
+    for p in $(ls /dev/serial/by-id | xargs --no-run-if-empty -I{} readlink --canonicalize /dev/serial/by-id/{}); do
+        # Their udev property are then queried and searched for the VENDOR_ID
+        if [ `udevadm info -q property ${p} | grep ${VENDOR_ID} | wc -l` -gt 0 ]; then
+            # If there is a match, return it.
+            echo ${p}
+            return 0
+        fi
+    done
+}
+
+# Monitor appearing/disappearing of USB devices
+udevadm monitor -k -s usb | while read START OP DEV REST; do
+    # Check if user defined
+    RPLIDAR_PATH="$(snapctl get serial-port)"
+    # If not, look for it
+    if [ -z "${RPLIDAR_PATH}" ]; then
+        if test "$START" = "KERNEL"; then
+            # First lines of "udevadm monitor" output,
+            # Check for already plugged devices.
+
+            RPLIDAR_PATH=`get_path`
+
+        elif test "$OP" = "add"; then
+            # New device got added
+            RPLIDAR_PATH=`get_path`
+        fi
+    fi
+
+    if [ ${RPLIDAR_PATH} ]; then
+        logger -t ${SNAP_NAME} "Found sensor at '${RPLIDAR_PATH}'. Launching."
+        snapctl set serial-port=${RPLIDAR_PATH}
+        # Start rplidar
+        $SNAP/usr/bin/launcher
+    fi
+done

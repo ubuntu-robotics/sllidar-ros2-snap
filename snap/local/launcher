@@ -17,6 +17,8 @@ done
 # Replace '-' with '_'
 LAUNCH_OPTIONS=$(echo ${LAUNCH_OPTIONS} | tr - _)
 
-logger -t ${SNAP_NAME} "Running with options: ${LAUNCH_OPTIONS}"
+if [ ${LAUNCH_OPTIONS} ]; then
+  logger -t ${SNAP_NAME} "Running with options: ${LAUNCH_OPTIONS}"
+fi
 
 ${SNAP}/ros2 launch sllidar_ros2 sllidar_${MODEL}_launch.py ${LAUNCH_OPTIONS}
