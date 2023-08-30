@@ -4,7 +4,7 @@ MODEL="$(snapctl get model)"
 
 LAUNCH_OPTIONS=""
 
-OPTIONS="baudrate channel-type serial-port serial-baudrate frame-id inverted \
+OPTIONS="baudrate channel-type serial-baudrate frame-id inverted \
 angle-compensate scan-mode udp-ip udp-port scan-frequency"
 
 for OPTION in ${OPTIONS}; do
@@ -13,6 +13,14 @@ for OPTION in ${OPTIONS}; do
     LAUNCH_OPTIONS+="${OPTION}:=${VALUE} "
   fi
 done
+
+VALUE="$(snapctl get serial-port)"
+if [ -n "${VALUE}" ]; then
+  LAUNCH_OPTIONS+="serial-port:=${VALUE} "
+elif [ -z "${RPLIDAR_AUTO_PATH}" ]; then
+  # Check if the path was set by the watcher script
+  LAUNCH_OPTIONS+="serial-port:=${RPLIDAR_AUTO_PATH} "
+fi
 
 # Replace '-' with '_'
 LAUNCH_OPTIONS=$(echo ${LAUNCH_OPTIONS} | tr - _)

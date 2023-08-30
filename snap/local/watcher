@@ -17,25 +17,26 @@ get_path() {
 # Monitor appearing/disappearing of USB devices
 udevadm monitor -k -s usb | while read START OP DEV REST; do
     # Check if user defined
-    RPLIDAR_PATH="$(snapctl get serial-port)"
+    RPLIDAR_AUTO_PATH="$(snapctl get serial-port)"
     # If not, look for it
-    if [ -z "${RPLIDAR_PATH}" ]; then
+    if [ -z "${RPLIDAR_AUTO_PATH}" ]; then
         if test "$START" = "KERNEL"; then
             # First lines of "udevadm monitor" output,
             # Check for already plugged devices.
 
-            RPLIDAR_PATH=`get_path`
+            RPLIDAR_AUTO_PATH=`get_path`
 
         elif test "$OP" = "add"; then
             # New device got added
-            RPLIDAR_PATH=`get_path`
+            RPLIDAR_AUTO_PATH=`get_path`
         fi
     fi
 
-    if [ ${RPLIDAR_PATH} ]; then
-        logger -t ${SNAP_NAME} "Found sensor at '${RPLIDAR_PATH}'. Launching."
-        snapctl set serial-port=${RPLIDAR_PATH}
+    if [ ${RPLIDAR_AUTO_PATH} ]; then
+        logger -t ${SNAP_NAME} "Found sensor at '${RPLIDAR_AUTO_PATH}'. Launching."
         # Start rplidar
-        $SNAP/usr/bin/launcher
+        # Sourcing so that var 'RPLIDAR_AUTO_PATH' is forwarded,
+        # but in a subshell so that nothing is modified in the parent shell
+        ( . $SNAP/usr/bin/launcher )
     fi
 done
