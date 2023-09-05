@@ -10,16 +10,16 @@ angle-compensate scan-mode udp-ip udp-port scan-frequency"
 for OPTION in ${OPTIONS}; do
   VALUE="$(snapctl get ${OPTION})"
   if [ -n "${VALUE}" ]; then
-    LAUNCH_OPTIONS+="${OPTION}:=${VALUE} "
+    LAUNCH_OPTIONS="${LAUNCH_OPTIONS} ${OPTION}:=${VALUE}"
   fi
 done
 
 VALUE="$(snapctl get serial-port)"
 if [ -n "${VALUE}" ]; then
-  LAUNCH_OPTIONS+="serial-port:=${VALUE} "
-elif [ -z "${RPLIDAR_AUTO_PATH}" ]; then
+  LAUNCH_OPTIONS="${LAUNCH_OPTIONS} serial-port:=${VALUE}"
+elif [ ! -z "${RPLIDAR_AUTO_PATH}" ]; then
   # Check if the path was set by the watcher script
-  LAUNCH_OPTIONS+="serial-port:=${RPLIDAR_AUTO_PATH} "
+  LAUNCH_OPTIONS="${LAUNCH_OPTIONS} serial-port:=${RPLIDAR_AUTO_PATH}"
 fi
 
 # Replace '-' with '_'
