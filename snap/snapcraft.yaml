@@ -1,19 +1,18 @@
-name: rplidar
-adopt-info: rplidar
+name: sllidar-ros2
+adopt-info: sllidar-ros2
 license: BSD-2-Clause
-summary: The ROS 2 rplidar snap
+summary: The ROS 2 sllidar snap
 description: |
   ROS 2 node for SLAMTEC LIDAR.
 
   Upon installation, the snap must be configured:
 
     sudo snap set model="<lidar model>"
-    sudo snap set baudrate="<baudrate>"
 
   Furthermore its interfaces must be connected:
 
-    sudo snap connect rplidar:raw-usb
-    sudo snap connect rplidar:ros-humble ros-humble-ros-base
+    sudo snap connect sllidar-ros2:raw-usb
+    sudo snap connect sllidar-ros2:ros-humble ros-humble-ros-base
 
   Once the snap is configured and connected,
   it automatically start and launches the driver.
@@ -31,7 +30,7 @@ issues: todo
 website: http://www.slamtec.com/en/Lidar
 
 apps:
-  rplidar:
+  sllidar-ros2:
     command: usr/bin/watcher
     daemon: simple
     install-mode: disable
@@ -44,7 +43,7 @@ apps:
     extensions: [ros2-humble-ros-base]
 
 parts:
-  rplidar:
+  sllidar-ros2:
     plugin: colcon
     colcon-cmake-args:
       - -DCMAKE_BUILD_TYPE=Release
