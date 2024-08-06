@@ -21,7 +21,7 @@ jobs:
       store-login: ${{ secrets.STORE_LOGIN }}
     with:
       branch-name: ${{ inputs.branch-name == '' && github.ref || inputs.branch-name }}
-      snap-name: sslidar-ros2
+      snap-name: sllidar-ros2
       enable-experimental-extensions-env: true
       publish: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
       publish-track: jazzy

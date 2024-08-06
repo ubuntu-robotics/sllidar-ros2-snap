@@ -12,7 +12,7 @@ description: |
   Furthermore its interfaces must be connected:
 
     sudo snap connect sllidar-ros2:raw-usb
-    sudo snap connect sllidar-ros2:ros-jazzy ros-jazzy-ros-base
+    sudo snap connect sllidar-ros2:ros-jazzy-ros-base ros-jazzy-ros-base
 
   Once the snap is configured and connected,
   it automatically start and launches the driver.
