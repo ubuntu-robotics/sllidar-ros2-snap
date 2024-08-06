@@ -12,21 +12,21 @@ description: |
   Furthermore its interfaces must be connected:
 
     sudo snap connect sllidar-ros2:raw-usb
-    sudo snap connect sllidar-ros2:ros-humble ros-humble-ros-base
+    sudo snap connect sllidar-ros2:ros-jazzy ros-jazzy-ros-base
 
   Once the snap is configured and connected,
   it automatically start and launches the driver.
 
 grade: stable
 confinement: strict
-base: core22
+base: core24
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
+platforms:
+  amd64:
+  arm64:
 
-contact: todo
-issues: todo
+contact: https://github.com/ubuntu-robotics/sllidar-ros2-snap/issues
+issues: https://github.com/ubuntu-robotics/sllidar-ros2-snap/issues
 website: http://www.slamtec.com/en/Lidar
 
 apps:
@@ -35,12 +35,12 @@ apps:
     daemon: simple
     install-mode: disable
     plugs: [network, network-bind, raw-usb]
-    extensions: [ros2-humble-ros-base]
+    extensions: [ros2-jazzy-ros-base]
 
   launcher:
     command: usr/bin/launcher
     plugs: [network, network-bind, raw-usb]
-    extensions: [ros2-humble-ros-base]
+    extensions: [ros2-jazzy-ros-base]
 
 parts:
   sllidar-ros2:
